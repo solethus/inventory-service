@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  inventory:
+    build: ../
+    container_name: inventory_service
+    working_dir: /app
+    environment:
+      - DATABASE_URL=postgres://user:password@postgres:5432/inventory_db
+    ports:
+      - "50051:50051"  # Replace with the actual gRPC port
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    container_name: inventory_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: inventory_db
+    volumes:
+      - inventory_db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  inventory_db_data:
