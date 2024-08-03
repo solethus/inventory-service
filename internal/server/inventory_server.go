@@ -2,34 +2,37 @@ package server
 
 import (
 	"context"
+	"github.com/solethus/inventory-service/internal/service"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/jmoiron/sqlx"
 	pb "github.com/solethus/shared-proto/proto/inventory"
 
-	"github.com/solethus/inventory-service/internal/repository"
 	log "github.com/solethus/inventory-service/pkg/logger"
 )
 
 type InventoryServer struct {
 	pb.UnimplementedInventoryServiceServer
-	repo repository.InventoryRepository
+	service service.InventoryService
 }
 
-func NewInventoryServer(db *sqlx.DB) *InventoryServer {
+func NewInventoryServer(service service.InventoryService) *InventoryServer {
 	return &InventoryServer{
-		repo: repository.NewInventoryRepository(db),
+		service: service,
 	}
 }
 
 func (s *InventoryServer) AddCar(ctx context.Context, req *pb.AddCarRequest) (*pb.AddCarResponse, error) {
-	id, err := s.repo.AddCar(ctx, req.Car)
+	id, err := s.service.AddCar(ctx, req.Car)
 	if err != nil {
 		log.Logger.Error("error failed to add car", err)
 		return nil, status.Errorf(codes.Internal, "failed to add car: %v", err)
 	}
-	return &pb.AddCarResponse{Id: id}, nil
+	if id == nil || *id == "" {
+		log.Logger.Infof("invalid car id: %v\n", id)
+		return nil, status.Error(codes.Internal, "invalid car id")
+	}
+	return &pb.AddCarResponse{Id: *id}, nil
 }
 
 func (s *InventoryServer) GetCar(ctx context.Context, req *pb.GetCarRequest) (*pb.Car, error) {

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/solethus/inventory-service/internal/repository"
+	"github.com/solethus/inventory-service/internal/service"
 	"net"
 
 	"github.com/jmoiron/sqlx"
@@ -22,10 +24,14 @@ func main() {
 	}
 	defer db.Close()
 
+	// Create repository, service, and server
+	repo := repository.NewInventoryRepository(db)
+	svc := service.NewInventoryService(repo)
+	srv := server.NewInventoryServer(svc)
+
 	// Create gRPC server
 	s := grpc.NewServer()
-	inventoryServer := server.NewInventoryServer(db)
-	pb.RegisterInventoryServiceServer(s, inventoryServer)
+	pb.RegisterInventoryServiceServer(s, srv)
 
 	// Start listening
 	lis, err := net.Listen("tcp", ":50051")

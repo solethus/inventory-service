@@ -2,17 +2,19 @@ package repository
 
 import (
 	"context"
+	"github.com/google/uuid"
+	"github.com/solethus/inventory-service/internal/model"
 
 	"github.com/jmoiron/sqlx"
-
-	pb "github.com/solethus/shared-proto/proto/inventory"
 )
 
 type InventoryRepository interface {
-	AddCar(ctx context.Context, car *pb.Car) (string, error)
-	GetCar(ctx context.Context, id string) (*pb.Car, error)
-	ListCars(ctx context.Context, pageSize, pageNumber int32) ([]*pb.Car, int32, error)
-	UpdateCarStock(ctx context.Context, id string, stockChange int32) (int32, error)
+	AddCar(ctx context.Context, car *model.Car) (*string, error)
+	GetCar(ctx context.Context, id uuid.UUID) (*model.Car, error)
+	UpdateCar(ctx context.Context, car *model.Car) error
+	DeleteCar(ctx context.Context, id uuid.UUID) error
+	ListCars(ctx context.Context, filter model.CarFilter, pagination model.PaginationParams, sort model.SortParams) ([]*model.Car, int, error)
+	GetInventoryStats(ctx context.Context) (*model.InventoryStats, error)
 }
 
 type inventoryRepository struct {
@@ -23,22 +25,32 @@ func NewInventoryRepository(db *sqlx.DB) InventoryRepository {
 	return &inventoryRepository{db: db}
 }
 
-func (i inventoryRepository) AddCar(ctx context.Context, car *pb.Car) (string, error) {
+func (r *inventoryRepository) AddCar(ctx context.Context, car *model.Car) (*string, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (i inventoryRepository) GetCar(ctx context.Context, id string) (*pb.Car, error) {
+func (r *inventoryRepository) GetCar(ctx context.Context, id uuid.UUID) (*model.Car, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (i inventoryRepository) ListCars(ctx context.Context, pageSize, pageNumber int32) ([]*pb.Car, int32, error) {
+func (r *inventoryRepository) UpdateCar(ctx context.Context, car *model.Car) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (i inventoryRepository) UpdateCarStock(ctx context.Context, id string, stockChange int32) (int32, error) {
+func (r *inventoryRepository) DeleteCar(ctx context.Context, id uuid.UUID) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (r *inventoryRepository) ListCars(ctx context.Context, filter model.CarFilter, pagination model.PaginationParams, sort model.SortParams) ([]*model.Car, int, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (r *inventoryRepository) GetInventoryStats(ctx context.Context) (*model.InventoryStats, error) {
 	//TODO implement me
 	panic("implement me")
 }
