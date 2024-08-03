@@ -3,16 +3,13 @@
 all: build
 
 build:
-	go build -o bin/inventory-service ./cmd/inventory
+	go build -o bin/inventory-service .
 
 test:
 	go test ./...
 
 clean:
 	rm -rf bin
-
-proto:
-	./scripts/generate_proto.sh
 
 run:
 	go run ./main.go

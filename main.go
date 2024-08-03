@@ -9,7 +9,7 @@ import (
 
 	"github.com/solethus/inventory-service/internal/server"
 	log "github.com/solethus/inventory-service/pkg/logger"
-	pb "github.com/solethus/inventory-service/proto/inventory"
+	pb "github.com/solethus/shared-proto/proto/inventory"
 )
 
 func main() {

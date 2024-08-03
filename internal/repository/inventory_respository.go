@@ -5,7 +5,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
-	pb "github.com/solethus/inventory-service/proto/inventory"
+	pb "github.com/solethus/shared-proto/proto/inventory"
 )
 
 type InventoryRepository interface {
